@@ -1,3 +1,5 @@
+Aplicatie de gestionare a unei farmacii.
+
 Descrierea Proiectului
 Aplicația are ca scop digitalizarea și eficientizarea proceselor de gestionare a stocului dintr-o farmacie. Aceasta va oferi un control riguros asupra inventarului de medicamente, permițând monitorizarea stocurilor, actualizarea rapidă a informațiilor și facilitarea procesului de căutare și eliberare a produselor farmaceutice către pacienți.
 
