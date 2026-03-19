@@ -14,7 +14,7 @@ namespace GestiuneFarmacie
         public void AdaugaMedicament(Medicament medicamentNou)
         {
             medicamente.Add(medicamentNou);
-            Console.WriteLine($"\nMedicamentul '{medicamentNou.Nume}' a fost adăugat cu succes!");
+            Console.WriteLine($"\nMedicamentul '{medicamentNou.Nume}' a fost adaugat cu succes!");
         }
 
         public void AfiseazaMedicamente()
@@ -22,7 +22,7 @@ namespace GestiuneFarmacie
             Console.WriteLine("\n--- Lista Medicamente ---");
             if (medicamente.Count == 0)
             {
-                Console.WriteLine("Nu există medicamente în stoc.");
+                Console.WriteLine("Nu exista medicamente in stoc.");
                 return;
             }
 
