@@ -1,6 +1,17 @@
-Aplicatie de gestionare a unei farmacii.
+<div align="center">
 
-Descrierea Proiectului
+#  Aplicație de Gestiune a unei Farmacii 
+
+[![C#](https://img.shields.io/badge/C%23-239120?style=for-the-badge&logo=c-sharp&logoColor=white)]()
+[![.NET 8.0](https://img.shields.io/badge/.NET_8.0-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)]()
+
+*Un proiect pentru digitalizarea și eficientizarea stocurilor de medicamente.*
+
+---
+</div>
+
+## Descrierea Proiectului
+
 Aplicația are ca scop digitalizarea și eficientizarea proceselor de gestionare a stocului dintr-o farmacie. Aceasta va oferi un control riguros asupra inventarului de medicamente, permițând monitorizarea stocurilor, actualizarea rapidă a informațiilor și facilitarea procesului de căutare și eliberare a produselor farmaceutice către pacienți.
 
 Operațiile principale ce vor fi implementate:
