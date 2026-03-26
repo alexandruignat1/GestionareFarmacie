@@ -1,39 +1,33 @@
 <div align="center">
 
-#  Aplicație de Gestiune a unei Farmacii 
+# Aplicatie de Gestiune a unei Farmacii
 
 [![C#](https://img.shields.io/badge/C%23-239120?style=for-the-badge&logo=c-sharp&logoColor=white)]()
 [![.NET 8.0](https://img.shields.io/badge/.NET_8.0-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)]()
 
-*Un proiect pentru digitalizarea și eficientizarea stocurilor de medicamente.*
+*Proiect pentru digitalizarea si eficientizarea stocurilor de medicamente.*
 
 ---
 </div>
 
 ## Descrierea Proiectului
+Aplicatia este dezvoltata in C# si are ca scop gestionarea inventarului unei farmacii direct din linia de comanda (Console App). Aceasta ofera un control riguros asupra produselor, permitand operatiuni de baza asupra stocului.
 
-Aplicația are ca scop digitalizarea și eficientizarea proceselor de gestionare a stocului dintr-o farmacie. Aceasta va oferi un control riguros asupra inventarului de medicamente, permițând monitorizarea stocurilor, actualizarea rapidă a informațiilor și facilitarea procesului de căutare și eliberare a produselor farmaceutice către pacienți.
+## Functionalitati Curente
+* **Adaugare medicament:** Introducerea unui produs nou in sistem, cu validarea datelor pentru a preveni erorile de tastare (ID, Nume, Tip, Moment de administrare, Pret, Stoc).
+* **Afisare inventar:** Vizualizarea tuturor medicamentelor inregistrate in memorie la un moment dat.
+* **Cautare medicament:** Gasirea rapida a medicamentelor prin introducerea unei parti din nume, folosind interogari LINQ.
+* **Gestiunea optiunilor multiple:** Utilizarea enumerarilor cu atributul Flags pentru a permite selectarea mai multor momente de administrare simultan (ex: Dimineata si Seara).
 
-Operațiile principale ce vor fi implementate:
-1. Modulul de Gestiune a Medicamentelor (Inventar)
-Acesta este nucleul aplicației și gestionează direct stocul fizic al farmaciei.
+## Functionalitati Viitoare (In dezvoltare)
+Pe parcursul dezvoltarii proiectului, este posibil sa fie implementate urmatoarele functionalitati:
+* **Modificarea datelor:** Actualizarea informatiilor unui medicament existent (ex: schimbarea pretului sau actualizarea stocului).
+* **Stergerea unui medicament:** Eliminarea completa a unui produs din inventar.
+* **Sortarea listei:** Afisarea medicamentelor ordonate dupa nume, pret sau cantitatea din stoc.
 
-Adăugare medicament: Introducerea unui produs nou în sistem, specificând detalii esențiale precum: denumire, categorie (ex: analgezice, antibiotice), preț, cantitate pe stoc și data expirării.
+## Structura Proiectului
+Codul este modularizat pentru o mai buna organizare:
+* `Program.cs` - Punctul de intrare in aplicatie si meniul interactiv pentru utilizator.
+* `Medicament.cs` - Definirea modelului de date si a enumerarilor (`TipMedicament`, `MomentAdministrare`).
+* `Inventar.cs` - Clasa responsabila cu logica de business (salvarea in lista generica, afisarea si filtrarea datelor).
 
-Editare/Actualizare medicament: Modificarea detaliilor unui medicament existent (de exemplu, actualizarea prețului sau corectarea unor informații introduse greșit).
-
-Ștergere medicament: Eliminarea din baza de date a produselor care au fost retrase de pe piață sau care nu vor mai fi comercializate.
-
-Afișare listă medicamente: Vizualizarea întregului inventar într-un format tabelar, ușor de citit.
-
-Căutare medicament: Un sistem rapid de filtrare pentru a găsi un produs specific, folosind criterii precum denumirea medicamentului sau substanța activă.
-
-2. Modulul de Vânzări și Eliberare (Pentru extindere ulterioară)
-Înregistrarea vânzării: Selectarea medicamentelor solicitate de pacient și calcularea totalului de plată.
-
-Scăderea automată din stoc: În momentul finalizării unei vânzări, cantitatea respectivă va fi dedusă automat din stocul farmaciei.
-
-3. Modulul de Alerte (Pentru extindere ulterioară)
-Alerte stoc minim: Notificarea utilizatorului (farmacistului) atunci când stocul unui medicament scade sub o anumită limită setată.
-
-Alerte expirare: Identificarea și afișarea medicamentelor care se apropie de data expirării pentru a fi retrase de la raft.
