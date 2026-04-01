@@ -9,3 +9,4 @@ C:\PIU\LibrarieModele\obj\Debug\net8.0\LibrarieModele.dll
 C:\PIU\LibrarieModele\obj\Debug\net8.0\refint\LibrarieModele.dll
 C:\PIU\LibrarieModele\obj\Debug\net8.0\LibrarieModele.pdb
 C:\PIU\LibrarieModele\obj\Debug\net8.0\ref\LibrarieModele.dll
+C:\PIU\LibrarieModele\obj\Debug\net8.0\LibrarieModele.sourcelink.json

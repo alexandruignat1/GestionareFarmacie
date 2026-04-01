@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="GestionareFarmacie/GestionareFarmacie.csproj" />
+  <Project Path="LibrarieModele/LibrarieModele.csproj" />
+  <Project Path="NivelStocareDate/NivelStocareDate.csproj" />
+</Solution>

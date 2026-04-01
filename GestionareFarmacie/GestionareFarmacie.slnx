@@ -1,5 +1,0 @@
-<Solution>
-  <Project Path="../LibrarieModele/LibrarieModele.csproj" Id="c5bbe1f6-5a56-4b01-9048-875013edb41f" />
-  <Project Path="../NivelStocareDate/NivelStocareDate.csproj" Id="581becdb-6563-47a3-8977-8b6296b04e5a" />
-  <Project Path="GestionareFarmacie.csproj" />
-</Solution>
