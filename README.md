@@ -5,31 +5,41 @@
 [![C#](https://img.shields.io/badge/C%23-239120?style=for-the-badge&logo=c-sharp&logoColor=white)]()
 [![.NET 8.0](https://img.shields.io/badge/.NET_8.0-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)]()
 
-*Proiect pentru digitalizarea si eficientizarea stocurilor de medicamente.*
+*Proiect modular pentru digitalizarea si eficientizarea stocurilor de medicamente.*
 
 ---
 </div>
 
 ## Descrierea Proiectului
-Aplicatia este dezvoltata in C# si are ca scop gestionarea inventarului unei farmacii direct din linia de comanda (Console App). Aceasta ofera un control riguros asupra produselor, permitand operatiuni complete de tip CRUD (Create, Read, Update, Delete) asupra inventarului, avand implementata si persistenta datelor.
+Aplicatia este dezvoltata in C# si are ca scop gestionarea inventarului unei farmacii. Proiectul este construit folosind o arhitectura decuplata pe 3 niveluri (N-Tier Architecture), separand interfata utilizatorului de modelele de date si de logica de salvare. Aceasta ofera operatiuni complete de tip CRUD, cu persistenta datelor in fisiere text.
 
 ## Functionalitati Curente
-* **Adaugare medicament:** Introducerea unui produs nou in sistem, cu salvare automata in fisier text.
-* **Afisare inventar:** Citirea si vizualizarea tuturor medicamentelor inregistrate in fisierul de pe hard disk.
-* **Cautare medicament:** Gasirea rapida a medicamentelor prin introducerea unei parti din nume, folosind interogari LINQ.
-* **Modificare medicament:** Actualizarea tuturor datelor unui produs existent direct in baza de date (fisier).
-* **Stergere medicament:** Eliminarea completa a unui medicament din sistem pe baza ID-ului.
-* **Gestiunea optiunilor multiple:** Utilizarea enumerarilor cu atributul Flags pentru a permite selectarea mai multor momente de administrare simultan (ex: Dimineata si Seara).
+* **Operatiuni CRUD complete:** Adaugare, afisare, modificare si stergere de medicamente, cu salvare automata in fisier pe hard disk.
+* **Cautare inteligenta:** Filtrarea rapida a medicamentelor dupa nume folosind interogari LINQ.
+* **Gestiunea entitatilor multiple:** Sistemul este scalabil, avand modele definite atat pentru Medicamente, cat si pentru Farmacisti.
+* **Optiuni multiple (Flags):** Utilizarea enumerarilor pentru a permite selectarea simultana a mai multor momente de administrare.
+* **Siguranta si validare:** Tratarea exceptiilor (try-catch) si validarea datelor introduse de utilizator pentru a preveni inchiderea accidentala a aplicatiei.
+* **Configurari externe:** Numele fisierului folosit ca baza de date este citit dinamic din fisierul extern `App.config`.
 
 ## Functionalitati Viitoare (In dezvoltare)
 Pe parcursul dezvoltarii proiectului, vor fi implementate urmatoarele functionalitati:
-* **Sortarea listei:** Afisarea medicamentelor ordonate alfabetic dupa nume, crescator dupa pret sau dupa cantitatea ramasa in stoc.
-* **Integrare Baze de Date (SQL):** Extinderea aplicatiei prin adaugarea unei noi clase de stocare care sa comunice cu o baza de date reala, folosind aceeasi interfata.
-* **Interfata Grafica (GUI):** Trecerea de la o aplicatie de tip consola la o aplicatie cu o interfata vizuala moderna (ferestre, butoane, tabele).
+* **Sortarea listei:** Afisarea medicamentelor ordonate alfabetic dupa nume, crescator dupa pret sau dupa cantitatea din stoc.
+* **Integrare Baze de Date (SQL):** Adaugarea unui nou nivel de stocare care sa comunice cu o baza de date reala, inlocuind fisierul text, dar folosind aceeasi interfata.
+* **Interfata Grafica (GUI):** Migrarea de la aplicatia de tip consola la o aplicatie cu o interfata vizuala moderna (ferestre, tabele, butoane).
 
-## Structura Proiectului
-Codul este decuplat si modularizat pentru o mai buna organizare:
-* `Program.cs` - Punctul de intrare in aplicatie si meniul interactiv pentru utilizator.
-* `Medicament.cs` - Definirea modelului de date, a enumerarilor si a functiilor de pregatire a textului pentru fisier.
-* `IStocareMedicamente.cs` - Interfata (contractul) care defineste setul obligatoriu de functii pentru gestionarea bazei de date.
-* `AdministrareMedicamente_FisierText.cs` - Clasa responsabila cu logica tehnica (citire, scriere, editare, stergere) din fisierul text.
+## Arhitectura si Structura Proiectului
+Solutia este impartita in 3 proiecte separate pentru o organizare profesionala a codului:
+
+### 1. GestionareFarmacie (Proiect Consola)
+* Reprezinta interfata cu utilizatorul.
+* Contine `Program.cs` - meniul interactiv, comunicarea cu utilizatorul si afisarea datelor in consola.
+* Contine fisierul `App.config` pentru setarile generale ale aplicatiei.
+
+### 2. LibrarieModele (Class Library)
+* Reprezinta "depozitul" cu datele si entitatile aplicatiei.
+* Contine `Medicament.cs` si `Farmacist.cs` - modelele obiectelor, enumerarile aferente si metodele de formatare a textului pentru salvarea in fisiere.
+
+### 3. NivelStocareDate (Class Library)
+* Reprezinta logica de business si persistenta datelor.
+* Contine interfata `IStocareMedicamente.cs` - contractul obligatoriu pentru operatiunile cu baza de date.
+* Contine `AdministrareMedicamente_FisierText.cs` - clasa responsabila exclusiv cu scrierea, citirea, modificarea si stergerea liniilor din fisierul text, in conditii de siguranta.
