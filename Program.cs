@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq; // Lab 4 - implementam Linq
-using GestiuneFarmacie;
+using GestionareFarmacie;
 
 // Lab 5 - implementam Interfete (instantierea folosind interfata)
 IStocareMedicamente adminFarmacie = new AdministrareMedicamente_FisierText();
@@ -24,9 +24,21 @@ while (ruleaza)
     {
         case "1":
             // Lab 1 - implementam Tipuri de date valoare. Conversii.
-            int id;
-            Console.Write("Introdu ID: ");
-            while (!int.TryParse(Console.ReadLine(), out id)) Console.Write("Eroare! Introdu numar: ");
+            int id = 0;
+            bool idValid = false;
+            while (!idValid)
+            {
+                try
+                {
+                    Console.Write("Introdu ID: ");
+                    id = int.Parse(Console.ReadLine()); // Daca pui litere, va da eroare si va sari la catch
+                    idValid = true;
+                }
+                catch (FormatException) // Lab 4 - implementam Tratarea exceptiilor
+                {
+                    Console.WriteLine("Eroare: Trebuie sa introduceti un numar valid pentru ID!");
+                }
+            }
 
             Console.Write("Introdu Nume: ");
             string nume = Console.ReadLine();
