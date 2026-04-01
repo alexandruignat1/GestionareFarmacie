@@ -11,23 +11,25 @@
 </div>
 
 ## Descrierea Proiectului
-Aplicatia este dezvoltata in C# si are ca scop gestionarea inventarului unei farmacii direct din linia de comanda (Console App). Aceasta ofera un control riguros asupra produselor, permitand operatiuni de baza asupra stocului.
+Aplicatia este dezvoltata in C# si are ca scop gestionarea inventarului unei farmacii direct din linia de comanda (Console App). Aceasta ofera un control riguros asupra produselor, permitand operatiuni complete de tip CRUD (Create, Read, Update, Delete) asupra inventarului, avand implementata si persistenta datelor.
 
 ## Functionalitati Curente
-* **Adaugare medicament:** Introducerea unui produs nou in sistem, cu validarea datelor pentru a preveni erorile de tastare (ID, Nume, Tip, Moment de administrare, Pret, Stoc).
-* **Afisare inventar:** Vizualizarea tuturor medicamentelor inregistrate in memorie la un moment dat.
+* **Adaugare medicament:** Introducerea unui produs nou in sistem, cu salvare automata in fisier text.
+* **Afisare inventar:** Citirea si vizualizarea tuturor medicamentelor inregistrate in fisierul de pe hard disk.
 * **Cautare medicament:** Gasirea rapida a medicamentelor prin introducerea unei parti din nume, folosind interogari LINQ.
+* **Modificare medicament:** Actualizarea tuturor datelor unui produs existent direct in baza de date (fisier).
+* **Stergere medicament:** Eliminarea completa a unui medicament din sistem pe baza ID-ului.
 * **Gestiunea optiunilor multiple:** Utilizarea enumerarilor cu atributul Flags pentru a permite selectarea mai multor momente de administrare simultan (ex: Dimineata si Seara).
 
 ## Functionalitati Viitoare (In dezvoltare)
-Pe parcursul dezvoltarii proiectului, este posibil sa fie implementate urmatoarele functionalitati:
-* **Modificarea datelor:** Actualizarea informatiilor unui medicament existent (ex: schimbarea pretului sau actualizarea stocului).
-* **Stergerea unui medicament:** Eliminarea completa a unui produs din inventar.
-* **Sortarea listei:** Afisarea medicamentelor ordonate dupa nume, pret sau cantitatea din stoc.
+Pe parcursul dezvoltarii proiectului, vor fi implementate urmatoarele functionalitati:
+* **Sortarea listei:** Afisarea medicamentelor ordonate alfabetic dupa nume, crescator dupa pret sau dupa cantitatea ramasa in stoc.
+* **Integrare Baze de Date (SQL):** Extinderea aplicatiei prin adaugarea unei noi clase de stocare care sa comunice cu o baza de date reala, folosind aceeasi interfata.
+* **Interfata Grafica (GUI):** Trecerea de la o aplicatie de tip consola la o aplicatie cu o interfata vizuala moderna (ferestre, butoane, tabele).
 
 ## Structura Proiectului
-Codul este modularizat pentru o mai buna organizare:
+Codul este decuplat si modularizat pentru o mai buna organizare:
 * `Program.cs` - Punctul de intrare in aplicatie si meniul interactiv pentru utilizator.
-* `Medicament.cs` - Definirea modelului de date si a enumerarilor (`TipMedicament`, `MomentAdministrare`).
-* `Inventar.cs` - Clasa responsabila cu logica de business (salvarea in lista generica, afisarea si filtrarea datelor).
-
+* `Medicament.cs` - Definirea modelului de date, a enumerarilor si a functiilor de pregatire a textului pentru fisier.
+* `IStocareMedicamente.cs` - Interfata (contractul) care defineste setul obligatoriu de functii pentru gestionarea bazei de date.
+* `AdministrareMedicamente_FisierText.cs` - Clasa responsabila cu logica tehnica (citire, scriere, editare, stergere) din fisierul text.
