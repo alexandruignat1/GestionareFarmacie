@@ -1,0 +1,132 @@
+﻿<Window x:Class="GestionareFarmacie.WPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Sistem Gestiune Farmacie" Height="550" Width="950" MinWidth="850" MinHeight="500" Background="#F3F4F6">
+
+    <Window.Resources>
+        <SolidColorBrush x:Key="PrimaryBlue" Color="#0078D7"/>
+        <SolidColorBrush x:Key="TextDark" Color="#202124"/>
+
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource PrimaryBlue}"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Height" Value="26"/>
+            <Setter Property="Margin" Value="2,5,2,0"/>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+
+        <Style TargetType="Label">
+            <Setter Property="Foreground" Value="{StaticResource TextDark}"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="0,5,0,0"/>
+        </Style>
+    </Window.Resources>
+
+    <TabControl Margin="10">
+
+        <TabItem Header="Gestiune Medicamente" FontSize="14" FontWeight="SemiBold">
+            <Grid Margin="15">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="280"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Margin="0,0,15,0">
+                    <TextBlock Text="Detalii Medicament" FontSize="18" FontWeight="Bold" Foreground="{StaticResource PrimaryBlue}" Margin="0,0,0,15"/>
+
+                    <Label Content="_Nume Medicament:"/>
+                    <TextBox x:Name="txtNume" Height="24" Text="{Binding MedicamentCurent.Nume, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+
+                    <Label Content="_Tip Medicament:"/>
+                    <ComboBox x:Name="cmbTip" Height="24" SelectedItem="{Binding MedicamentCurent.Tip, Mode=TwoWay}"/>
+
+                    <Label Content="_Moment Administrare:"/>
+                    <WrapPanel Margin="0,5,0,5">
+                        <CheckBox x:Name="cbDimineata" Content="Dimineața" Margin="0,0,10,0"/>
+                        <CheckBox x:Name="cbPranz" Content="Prânz" Margin="0,0,10,0"/>
+                        <CheckBox x:Name="cbSeara" Content="Seara" Margin="0,0,0,0"/>
+                    </WrapPanel>
+
+                    <Label Content="_Data Expirării:"/>
+                    <DatePicker x:Name="dpDataExpirarii" Height="24" SelectedDate="{Binding MedicamentCurent.DataExpirarii, Mode=TwoWay}"/>
+
+                    <Label Content="_Preț (RON):"/>
+                    <TextBox x:Name="txtPret" Height="24" Text="{Binding MedicamentCurent.Pret, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+
+                    <Label Content="_Stoc disponibil:"/>
+                    <TextBox x:Name="txtStoc" Height="24" Margin="0,0,0,15" Text="{Binding MedicamentCurent.Stoc, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+
+                    <UniformGrid Columns="2">
+                        <Button x:Name="btnAdauga" Content="Adaugă" Click="btnAdauga_Click"/>
+                        <Button x:Name="btnModifica" Content="Modifică" Click="btnModifica_Click"/>
+                        <Button x:Name="btnSterge" Content="Șterge" Click="btnSterge_Click" Background="#5C6B73"/>
+                        <Button x:Name="btnReset" Content="Reset" Click="btnReset_Click" Background="#5C6B73"/>
+                    </UniformGrid>
+                </StackPanel>
+
+                <Grid Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
+                        <Label Content="Filtrare după nume:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                        <TextBox x:Name="txtCautare" Width="150" Height="24" VerticalAlignment="Center"/>
+                        <Button x:Name="btnCauta" Content="Caută" Click="btnCauta_Click" Width="60" Margin="10,0,0,0"/>
+                        <Button x:Name="btnToate" Content="Toate" Click="btnToate_Click" Width="60" Background="#5C6B73"/>
+                    </StackPanel>
+
+                    <DataGrid x:Name="dgMedicamente" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True" 
+                              AlternatingRowBackground="#EAF3FA" HeadersVisibility="Column"
+                              ItemsSource="{Binding ListaMedicamente}" SelectedItem="{Binding MedicamentCurent}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="40"/>
+                            <DataGridTextColumn Header="Nume" Binding="{Binding Nume}" Width="*"/>
+                            <DataGridTextColumn Header="Tip" Binding="{Binding Tip}" Width="75"/>
+                            <DataGridTextColumn Header="Expiră la" Binding="{Binding DataExpirarii, StringFormat=dd.MM.yyyy}" Width="80"/>
+                            <DataGridTextColumn Header="Preț" Binding="{Binding Pret}" Width="60"/>
+                            <DataGridTextColumn Header="Stoc" Binding="{Binding Stoc}" Width="50"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </Grid>
+        </TabItem>
+
+        <TabItem Header="Personal Farmacie" FontSize="14" FontWeight="SemiBold">
+            <Grid Margin="15">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="280"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Margin="0,0,15,0">
+                    <TextBlock Text="Detalii Farmacist" FontSize="18" FontWeight="Bold" Foreground="#27AE60" Margin="0,0,0,15"/>
+
+                    <Label Content="_Nume și Prenume:"/>
+                    <TextBox x:Name="txtNumeFarmacist" Height="24" Margin="0,0,0,15" Text="{Binding FarmacistCurent.Nume, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+
+                    <UniformGrid Columns="2">
+                        <Button x:Name="btnAdaugaFarmacist" Content="Adaugă" Click="btnAdaugaFarmacist_Click" Background="#27AE60"/>
+                        <Button x:Name="btnModificaFarmacist" Content="Modifică" Click="btnModificaFarmacist_Click" Background="#F39C12"/>
+                        <Button x:Name="btnStergeFarmacist" Content="Șterge" Click="btnStergeFarmacist_Click" Background="#5C6B73"/>
+                        <Button x:Name="btnResetFarmacist" Content="Reset" Click="btnResetFarmacist_Click" Background="#5C6B73"/>
+                    </UniformGrid>
+                </StackPanel>
+
+                <Grid Grid.Column="1">
+                    <DataGrid x:Name="dgFarmacisti" AutoGenerateColumns="False" IsReadOnly="True" 
+                              AlternatingRowBackground="#EAF3FA" HeadersVisibility="Column"
+                              ItemsSource="{Binding ListaFarmacisti}" SelectedItem="{Binding FarmacistCurent}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ID Personal" Binding="{Binding Id}" Width="80"/>
+                            <DataGridTextColumn Header="Nume Complet" Binding="{Binding Nume}" Width="*"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </Grid>
+        </TabItem>
+
+    </TabControl>
+</Window>

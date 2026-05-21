@@ -1,5 +1,6 @@
 <Solution>
   <Project Path="GestionareFarmacie/GestionareFarmacie.csproj" />
+  <Project Path="GestionareFarmacieWPF/GestionareFarmacieWPF.csproj" Id="09942c10-96fe-43c8-9386-81922bcb250f" />
   <Project Path="LibrarieModele/LibrarieModele.csproj" />
   <Project Path="NivelStocareDate/NivelStocareDate.csproj" />
 </Solution>

@@ -59,7 +59,7 @@ while (ruleaza)
             Console.Write("Introdu Stoc: ");
             while (!int.TryParse(Console.ReadLine(), out stoc)) Console.Write("Eroare! Introdu numar: ");
 
-            Medicament medNou = new Medicament(id, nume, tip, moment, pret, stoc);
+            Medicament medNou = new Medicament(id, nume, tip, moment, pret, stoc,DateTime.Now);
             adminFarmacie.AdaugaMedicament(medNou);
             Console.WriteLine("Medicament salvat cu succes in fisier!");
             break;
@@ -117,7 +117,7 @@ while (ruleaza)
             Console.Write("Stoc nou: ");
             while (!int.TryParse(Console.ReadLine(), out stocNou)) Console.Write("Eroare! Introdu numar: ");
 
-            Medicament medActualizat = new Medicament(idModificare, numeNou, tipNou, momentNou, pretNou, stocNou);
+            Medicament medActualizat = new Medicament(idModificare, numeNou, tipNou, momentNou, pretNou, stocNou,DateTime.Now);
             adminFarmacie.ModificaMedicament(medActualizat);
 
             Console.WriteLine("Medicamentul a fost modificat cu succes!");
