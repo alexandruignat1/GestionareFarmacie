@@ -1,45 +1,40 @@
 <div align="center">
 
-# Aplicatie de Gestiune a unei Farmacii
+# Aplicație de Gestiune a unei Farmacii
 
 [![C#](https://img.shields.io/badge/C%23-239120?style=for-the-badge&logo=c-sharp&logoColor=white)]()
 [![.NET 8.0](https://img.shields.io/badge/.NET_8.0-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)]()
+[![WPF](https://img.shields.io/badge/WPF-UI-blue?style=for-the-badge)]()
 
-*Proiect modular pentru digitalizarea si eficientizarea stocurilor de medicamente.*
+*Proiect modular pentru digitalizarea și eficientizarea stocurilor de medicamente.*
 
 ---
 </div>
 
 ## Descrierea Proiectului
-Aplicatia este dezvoltata in C# si are ca scop gestionarea inventarului unei farmacii. Proiectul este construit folosind o arhitectura decuplata pe 3 niveluri (N-Tier Architecture), separand interfata utilizatorului de modelele de date si de logica de salvare. Aceasta ofera operatiuni complete de tip CRUD, cu persistenta datelor in fisiere text.
+Aplicația este dezvoltată în C# și are ca scop gestionarea inventarului și a personalului unei farmacii. Proiectul a fost refactorizat dintr-o aplicație consolă într-o aplicație desktop modernă, utilizând tehnologia **WPF (Windows Presentation Foundation)**. Este construit folosind o arhitectură decuplată pe 3 niveluri , separând interfața utilizatorului de modelele de date și de logica de salvare, integrând totodată concepte de bază **MVVM**.
 
-## Functionalitati Curente
-* **Operatiuni CRUD complete:** Adaugare, afisare, modificare si stergere de medicamente, cu salvare automata in fisier pe hard disk.
-* **Cautare inteligenta:** Filtrarea rapida a medicamentelor dupa nume folosind interogari LINQ.
-* **Gestiunea entitatilor multiple:** Sistemul este scalabil, avand modele definite atat pentru Medicamente, cat si pentru Farmacisti.
-* **Optiuni multiple (Flags):** Utilizarea enumerarilor pentru a permite selectarea simultana a mai multor momente de administrare.
-* **Siguranta si validare:** Tratarea exceptiilor (try-catch) si validarea datelor introduse de utilizator pentru a preveni inchiderea accidentala a aplicatiei.
-* **Configurari externe:** Numele fisierului folosit ca baza de date este citit dinamic din fisierul extern `App.config`.
+## Funcționalități Curente
+* **Interfață Grafică (GUI) Modernă:** Implementată în WPF, având o temă cromatică unitară și elemente de design optimizate (butoane de dimensiuni reduse pentru o încadrare și vizibilitate perfectă în fereastră). Navigarea este organizată eficient prin intermediul unui `TabControl`.
+* **Data Binding & MVVM-lite:** Sincronizare automată și bidirecțională între interfața vizuală (XAML) și datele din cod folosind `INotifyPropertyChanged` și `ObservableCollection`.
+* **Validare Inteligentă a Datelor:** Implementarea interfeței `IDataErrorInfo` direct în clasele model pentru a valida automat intrările utilizatorului. Oferă feedback vizual nativ (chenare roșii) direct în formular.
+* **Operațiuni CRUD complete:** Adăugare, afișare, modificare și ștergere pentru două entități distincte (`Medicament` și `Farmacist`), cu salvare automată în fișiere text dedicate.
+* **Căutare inteligentă:** Filtrarea rapidă a înregistrărilor după nume folosind interogări LINQ, cu actualizarea instantanee a tabelelor (`DataGrid`).
+* **Opțiuni multiple (Flags):** Utilizarea enumerărilor cu atributul `[Flags]` pentru a permite selectarea simultană a mai multor momente de administrare prin `CheckBox`-uri.
 
-## Functionalitati Viitoare (In dezvoltare)
-Pe parcursul dezvoltarii proiectului, vor fi implementate urmatoarele functionalitati:
-* **Sortarea listei:** Afisarea medicamentelor ordonate alfabetic dupa nume, crescator dupa pret sau dupa cantitatea din stoc.
-* **Integrare Baze de Date (SQL):** Adaugarea unui nou nivel de stocare care sa comunice cu o baza de date reala, inlocuind fisierul text, dar folosind aceeasi interfata.
-* **Interfata Grafica (GUI):** Migrarea de la aplicatia de tip consola la o aplicatie cu o interfata vizuala moderna (ferestre, tabele, butoane).
 
-## Arhitectura si Structura Proiectului
-Solutia este impartita in 3 proiecte separate pentru o organizare profesionala a codului:
+## Arhitectura și Structura Proiectului
+Soluția este împărțită în 3 proiecte separate pentru o organizare profesională a codului:
 
-### 1. GestionareFarmacie (Proiect Consola)
-* Reprezinta interfata cu utilizatorul.
-* Contine `Program.cs` - meniul interactiv, comunicarea cu utilizatorul si afisarea datelor in consola.
-* Contine fisierul `App.config` pentru setarile generale ale aplicatiei.
+### 1. GestionareFarmacie.WPF (Proiect UI)
+* Reprezintă interfața grafică cu utilizatorul.
+* Conține ferestrele XAML și logica de interacțiune, folosind mecanisme de Data Binding pentru a comunica fluid cu restul aplicației, înlocuind vechea consolă.
 
 ### 2. LibrarieModele (Class Library)
-* Reprezinta "depozitul" cu datele si entitatile aplicatiei.
-* Contine `Medicament.cs` si `Farmacist.cs` - modelele obiectelor, enumerarile aferente si metodele de formatare a textului pentru salvarea in fisiere.
+* Reprezintă "depozitul" cu datele și entitățile aplicației.
+* Conține `Medicament.cs` și `Farmacist.cs` - modelele obiectelor îmbogățite cu reguli de validare, enumerările aferente și metodele de conversie a datelor.
 
 ### 3. NivelStocareDate (Class Library)
-* Reprezinta logica de business si persistenta datelor.
-* Contine interfata `IStocareMedicamente.cs` - contractul obligatoriu pentru operatiunile cu baza de date.
-* Contine `AdministrareMedicamente_FisierText.cs` - clasa responsabila exclusiv cu scrierea, citirea, modificarea si stergerea liniilor din fisierul text, in conditii de siguranta.
+* Reprezintă logica de business și persistența datelor.
+* Conține interfețele (`IStocareMedicamente`, `IStocareFarmacisti`) care reprezintă contractul obligatoriu pentru operațiunile cu baza de date.
+* Conține clasele responsabile exclusiv cu scrierea, citirea, modificarea și ștergerea liniilor din fișierele text, în condiții de siguranță.
