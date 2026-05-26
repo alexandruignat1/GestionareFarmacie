@@ -9,7 +9,6 @@ namespace GestionareFarmacie
     [Flags]
     public enum MomentAdministrare { Nespecificat = 0, Dimineata = 1, Pranz = 2, Seara = 4 }
 
-    // Implementăm INotifyPropertyChanged și IDataErrorInfo (Lab 10 & 11)
     public class Medicament : INotifyPropertyChanged, IDataErrorInfo
     {
         private const char SEPARATOR = ';';
@@ -49,16 +48,24 @@ namespace GestionareFarmacie
             Moment = (MomentAdministrare)Convert.ToInt32(dateFisier[3]);
             Pret = Convert.ToDecimal(dateFisier[4]);
             Stoc = Convert.ToInt32(dateFisier[5]);
-            DataExpirarii = DateTime.Now.AddYears(1);
+
+            if (dateFisier.Length > 6 && DateTime.TryParse(dateFisier[6], out DateTime dataParsata))
+            {
+                DataExpirarii = dataParsata;
+            }
+            else
+            {
+                DataExpirarii = DateTime.Now.AddYears(1);
+            }
         }
 
         public string ConversieLaSir_PentruFisier()
         {
-            return $"{Id}{SEPARATOR}{Nume}{SEPARATOR}{(int)Tip}{SEPARATOR}{(int)Moment}{SEPARATOR}{Pret}{SEPARATOR}{Stoc}";
+            return $"{Id}{SEPARATOR}{Nume}{SEPARATOR}{(int)Tip}{SEPARATOR}{(int)Moment}{SEPARATOR}{Pret}{SEPARATOR}{Stoc}{SEPARATOR}{DataExpirarii:dd.MM.yyyy}";
         }
 
         // ==========================================
-        // VALIDARE DATE: IDataErrorInfo (Lab 11)
+        // VALIDARE DATE
         // ==========================================
         public string Error => null!;
 
@@ -71,26 +78,29 @@ namespace GestionareFarmacie
                 {
                     case nameof(Nume):
                         if (string.IsNullOrWhiteSpace(Nume)) result = "Numele este obligatoriu!";
-                        else if (Nume.Length > 30) result = "Numele nu poate depăși 30 caractere!";
+                        else if (Nume.Length > 30) result = "Numele nu poate depăși 30 de caractere!";
                         break;
                     case nameof(Pret):
-                        if (Pret <= 0) result = "Prețul trebuie să fie strict pozitiv!";
+                        if (Pret <= 0) result = "Prețul trebuie să fie mai mare ca 0!";
                         break;
                     case nameof(Stoc):
                         if (Stoc < 0) result = "Stocul nu poate fi negativ!";
+                        break;
+                    case nameof(DataExpirarii):
+                        if (DataExpirarii.Date < DateTime.Now.Date) result = "Data expirării nu poate fi în trecut!";
                         break;
                 }
                 return result;
             }
         }
 
-        // Verifică dacă obiectul are vreo eroare
         public bool EsteValid => string.IsNullOrEmpty(this[nameof(Nume)]) &&
                                  string.IsNullOrEmpty(this[nameof(Pret)]) &&
-                                 string.IsNullOrEmpty(this[nameof(Stoc)]);
+                                 string.IsNullOrEmpty(this[nameof(Stoc)]) &&
+                                 string.IsNullOrEmpty(this[nameof(DataExpirarii)]);
 
         // ==========================================
-        // NOTIFICARE INTERFAȚĂ: INotifyPropertyChanged
+        // NOTIFICARE INTERFAȚĂ
         // ==========================================
         public event PropertyChangedEventHandler? PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null!)

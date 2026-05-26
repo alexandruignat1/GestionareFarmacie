@@ -4,128 +4,139 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
-using GestionareFarmacie;
 
 namespace GestionareFarmacie.WPF
 {
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
-        // Manageri de stocare
-        private IStocareMedicamente adminMedicamente;
-        private IStocareFarmacisti adminFarmacisti;
+        private AdministrareMedicamente_FisierText adminMedicamente;
+        private AdministrareFarmacisti_FisierText adminFarmacisti;
 
-        // Entitățile selectate în formulare
-        private Medicament medicamentCurent;
-        private Farmacist farmacistCurent;
-
-        // Listele observabile care se leagă la tabele
         public ObservableCollection<Medicament> ListaMedicamente { get; set; }
         public ObservableCollection<Farmacist> ListaFarmacisti { get; set; }
 
+        private Medicament medicamentCurent;
         public Medicament MedicamentCurent
         {
             get => medicamentCurent;
-            set { medicamentCurent = value; OnPropertyChanged(); ActualizeazaCheckBoxuri(); }
+            set { medicamentCurent = value; OnPropertyChanged(); }
         }
 
+        private Farmacist farmacistCurent;
         public Farmacist FarmacistCurent
         {
             get => farmacistCurent;
             set { farmacistCurent = value; OnPropertyChanged(); }
         }
 
-        public MainWindow()
+        // Variabila pentru a ține minte utilizatorul logat
+        private Farmacist utilizatorLogat;
+
+        // CONSTRUCTOR MODIFICAT
+        public MainWindow(Farmacist utilizator)
         {
             InitializeComponent();
+            utilizatorLogat = utilizator;
 
-            // Inițializare Manageri
+            // Ascundem complet tab-ul de personal dacă NU este admin
+            if (utilizatorLogat.EsteAdmin == false)
+            {
+                tabPersonal.Visibility = Visibility.Collapsed;
+            }
+
             adminMedicamente = new AdministrareMedicamente_FisierText();
             adminFarmacisti = new AdministrareFarmacisti_FisierText();
 
-            // Inițializare Liste
             ListaMedicamente = new ObservableCollection<Medicament>();
             ListaFarmacisti = new ObservableCollection<Farmacist>();
 
-            // Setare obiecte noi pentru pornire
             MedicamentCurent = new Medicament();
             FarmacistCurent = new Farmacist();
 
             DataContext = this;
-
             cmbTip.ItemsSource = Enum.GetValues(typeof(TipMedicament));
 
-            // Încărcare date din fișiere text
             IncarcaMedicamente();
             IncarcaFarmacisti();
         }
 
-        // ==========================================
-        // LOGICĂ MEDICAMENTE (TAB 1)
-        // ==========================================
         private void IncarcaMedicamente()
         {
+            var medicamente = adminMedicamente.GetMedicamente();
             ListaMedicamente.Clear();
-            foreach (var m in adminMedicamente.GetMedicamente()) ListaMedicamente.Add(m);
+            foreach (var m in medicamente) ListaMedicamente.Add(m);
         }
 
-        private MomentAdministrare GetMomentSelectat()
+        private void IncarcaFarmacisti()
         {
-            MomentAdministrare moment = MomentAdministrare.Nespecificat;
-            if (cbDimineata.IsChecked == true) moment |= MomentAdministrare.Dimineata;
-            if (cbPranz.IsChecked == true) moment |= MomentAdministrare.Pranz;
-            if (cbSeara.IsChecked == true) moment |= MomentAdministrare.Seara;
-            return moment;
+            var farmacisti = adminFarmacisti.GetFarmacisti();
+            ListaFarmacisti.Clear();
+            foreach (var f in farmacisti) ListaFarmacisti.Add(f);
         }
 
-        private void ActualizeazaCheckBoxuri()
-        {
-            if (MedicamentCurent != null)
-            {
-                cbDimineata.IsChecked = MedicamentCurent.Moment.HasFlag(MomentAdministrare.Dimineata);
-                cbPranz.IsChecked = MedicamentCurent.Moment.HasFlag(MomentAdministrare.Pranz);
-                cbSeara.IsChecked = MedicamentCurent.Moment.HasFlag(MomentAdministrare.Seara);
-            }
-        }
-
+        // ==========================================
+        // LOGICA PENTRU MEDICAMENTE
+        // ==========================================
         private void btnAdauga_Click(object sender, RoutedEventArgs e)
         {
+            if (MedicamentCurent == null) return;
+
             if (MedicamentCurent.EsteValid)
             {
-                MedicamentCurent.Moment = GetMomentSelectat();
-                MedicamentCurent.Id = new Random().Next(1, 1000);
-                adminMedicamente.AdaugaMedicament(MedicamentCurent);
-                IncarcaMedicamente();
-                btnReset_Click(sender, e);
+                int nouId = ListaMedicamente.Count > 0 ? ListaMedicamente.Max(m => m.Id) + 1 : 1;
+                MedicamentCurent.Id = nouId;
+
+                MomentAdministrare momenteSelectate = MomentAdministrare.Nespecificat;
+                if (cbDimineata.IsChecked == true) momenteSelectate |= MomentAdministrare.Dimineata;
+                if (cbPranz.IsChecked == true) momenteSelectate |= MomentAdministrare.Pranz;
+                if (cbSeara.IsChecked == true) momenteSelectate |= MomentAdministrare.Seara;
+                MedicamentCurent.Moment = momenteSelectate;
+
+                Medicament medicamentDeAdaugat = new Medicament(MedicamentCurent.Id, MedicamentCurent.Nume!, MedicamentCurent.Tip, MedicamentCurent.Moment, MedicamentCurent.Pret, MedicamentCurent.Stoc, MedicamentCurent.DataExpirarii);
+
+                adminMedicamente.AdaugaMedicament(medicamentDeAdaugat);
+                ListaMedicamente.Add(medicamentDeAdaugat);
+                MedicamentCurent = new Medicament();
+
+                cbDimineata.IsChecked = false; cbPranz.IsChecked = false; cbSeara.IsChecked = false;
             }
-            else MessageBox.Show("Erori în formularul medicamentelor.", "Atenție", MessageBoxButton.OK, MessageBoxImage.Warning);
+            else
+            {
+                MessageBox.Show("Completați corect toate datele medicamentului!", "Eroare", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
         }
 
         private void btnModifica_Click(object sender, RoutedEventArgs e)
         {
-            if (MedicamentCurent != null && MedicamentCurent.Id > 0 && MedicamentCurent.EsteValid)
+            if (MedicamentCurent == null) return;
+            if (dgMedicamente.SelectedItem != null && MedicamentCurent.EsteValid)
             {
-                MedicamentCurent.Moment = GetMomentSelectat();
+                MomentAdministrare momenteSelectate = MomentAdministrare.Nespecificat;
+                if (cbDimineata.IsChecked == true) momenteSelectate |= MomentAdministrare.Dimineata;
+                if (cbPranz.IsChecked == true) momenteSelectate |= MomentAdministrare.Pranz;
+                if (cbSeara.IsChecked == true) momenteSelectate |= MomentAdministrare.Seara;
+                MedicamentCurent.Moment = momenteSelectate;
+
                 adminMedicamente.ModificaMedicament(MedicamentCurent);
                 IncarcaMedicamente();
-                MessageBox.Show("Modificat cu succes!");
+                MedicamentCurent = new Medicament();
+                cbDimineata.IsChecked = false; cbPranz.IsChecked = false; cbSeara.IsChecked = false;
             }
         }
 
         private void btnSterge_Click(object sender, RoutedEventArgs e)
         {
-            if (MedicamentCurent != null && MedicamentCurent.Id > 0)
+            if (dgMedicamente.SelectedItem is Medicament medSelectat)
             {
-                if (MessageBox.Show($"Ștergi {MedicamentCurent.Nume}?", "Confirmare", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-                {
-                    adminMedicamente.StergeMedicament(MedicamentCurent.Id);
-                    IncarcaMedicamente();
-                    btnReset_Click(sender, e);
-                }
+                adminMedicamente.StergeMedicament(medSelectat.Id);
+                ListaMedicamente.Remove(medSelectat);
+                MedicamentCurent = new Medicament();
             }
         }
 
         private void btnReset_Click(object sender, RoutedEventArgs e)
         {
+            dgMedicamente.SelectedIndex = -1;
             MedicamentCurent = new Medicament();
             cbDimineata.IsChecked = false; cbPranz.IsChecked = false; cbSeara.IsChecked = false;
         }
@@ -135,9 +146,19 @@ namespace GestionareFarmacie.WPF
             string termen = txtCautare.Text.Trim().ToLower();
             if (!string.IsNullOrEmpty(termen))
             {
-                var rezultate = adminMedicamente.GetMedicamente().Where(m => m.Nume != null && m.Nume.ToLower().Contains(termen));
-                ListaMedicamente.Clear();
-                foreach (var m in rezultate) ListaMedicamente.Add(m);
+                var rezultate = adminMedicamente.GetMedicamente()
+                    .Where(m => m.Nume != null && m.Nume.ToLower().Contains(termen))
+                    .ToList();
+
+                if (rezultate.Count == 0)
+                {
+                    MessageBox.Show($"Nu a fost găsit niciun medicament care să conțină '{termen}'.", "Căutare fără rezultate", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                else
+                {
+                    ListaMedicamente.Clear();
+                    foreach (var m in rezultate) ListaMedicamente.Add(m);
+                }
             }
         }
 
@@ -148,56 +169,68 @@ namespace GestionareFarmacie.WPF
         }
 
         // ==========================================
-        // LOGICĂ FARMACIȘTI (TAB 2)
+        // LOGICA PENTRU FARMACIȘTI
         // ==========================================
-        private void IncarcaFarmacisti()
-        {
-            ListaFarmacisti.Clear();
-            foreach (var f in adminFarmacisti.GetFarmacisti()) ListaFarmacisti.Add(f);
-        }
-
         private void btnAdaugaFarmacist_Click(object sender, RoutedEventArgs e)
         {
+            if (FarmacistCurent == null)
+            {
+                FarmacistCurent = new Farmacist();
+                return;
+            }
+
             if (FarmacistCurent.EsteValid)
             {
-                FarmacistCurent.Id = new Random().Next(1, 1000);
-                adminFarmacisti.AdaugaFarmacist(FarmacistCurent);
-                IncarcaFarmacisti();
-                btnResetFarmacist_Click(sender, e);
+                int nouId = ListaFarmacisti.Count > 0 ? ListaFarmacisti.Max(f => f.Id) + 1 : 1;
+
+                // Preluăm inclusiv statusul EsteAdmin
+                Farmacist nouFarmacist = new Farmacist(nouId, FarmacistCurent.Nume!, FarmacistCurent.Email!, FarmacistCurent.Parola!, FarmacistCurent.EsteAdmin);
+
+                adminFarmacisti.AdaugaFarmacist(nouFarmacist);
+                ListaFarmacisti.Add(nouFarmacist);
+                FarmacistCurent = new Farmacist();
             }
-            else MessageBox.Show("Numele farmacistului este obligatoriu.", "Atenție", MessageBoxButton.OK, MessageBoxImage.Warning);
+            else
+            {
+                MessageBox.Show("Vă rugăm să completați corect toate câmpurile contului!", "Formular invalid", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
         }
 
         private void btnModificaFarmacist_Click(object sender, RoutedEventArgs e)
         {
-            if (FarmacistCurent != null && FarmacistCurent.Id > 0 && FarmacistCurent.EsteValid)
+            if (FarmacistCurent == null) return;
+
+            if (dgFarmacisti.SelectedItem is Farmacist farmacistSelectat && FarmacistCurent.EsteValid)
             {
                 adminFarmacisti.ModificaFarmacist(FarmacistCurent);
                 IncarcaFarmacisti();
-                MessageBox.Show("Date farmacist modificate!");
+                FarmacistCurent = new Farmacist();
+                MessageBox.Show("Datele contului au fost actualizate!", "Modificare reușită", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 
         private void btnStergeFarmacist_Click(object sender, RoutedEventArgs e)
         {
-            if (FarmacistCurent != null && FarmacistCurent.Id > 0)
+            if (dgFarmacisti.SelectedItem is Farmacist farmacistSelectat)
             {
-                if (MessageBox.Show($"Ștergi farmacistul {FarmacistCurent.Nume}?", "Confirmare", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                var raspuns = MessageBox.Show($"Sigur doriți să ștergeți contul lui {farmacistSelectat.Nume}?", "Confirmare ștergere", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (raspuns == MessageBoxResult.Yes)
                 {
-                    adminFarmacisti.StergeFarmacist(FarmacistCurent.Id);
-                    IncarcaFarmacisti();
-                    btnResetFarmacist_Click(sender, e);
+                    adminFarmacisti.StergeFarmacist(farmacistSelectat.Id);
+                    ListaFarmacisti.Remove(farmacistSelectat);
+                    FarmacistCurent = new Farmacist();
                 }
             }
         }
 
         private void btnResetFarmacist_Click(object sender, RoutedEventArgs e)
         {
+            dgFarmacisti.SelectedIndex = -1;
             FarmacistCurent = new Farmacist();
         }
 
         // ==========================================
-        // NOTIFICĂRI
+        // NOTIFICARE INTERFAȚĂ
         // ==========================================
         public event PropertyChangedEventHandler? PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null!)
