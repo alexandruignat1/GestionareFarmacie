@@ -48,13 +48,13 @@ Exemplu de format valid pentru un cont de Administrator:
 ## Capturi de Ecran
 
 ### 1. Fereastra de Autentificare
-![Autentificare]<img width="385" height="444" alt="Autentificare" src="https://github.com/user-attachments/assets/e3e5c5c3-3b11-4322-94c5-f22d231dd650" />
+<img width="385" height="444" alt="Autentificare" src="https://github.com/user-attachments/assets/e3e5c5c3-3b11-4322-94c5-f22d231dd650" />
 
 
 ### 2. Gestiune Medicamente (Interfață și Validare)
-![Gestiune Medicamente]<img width="1052" height="618" alt="Interfata Validare" src="https://github.com/user-attachments/assets/129b349a-198c-4e05-870c-0773a92fb726" />
+<img width="1052" height="618" alt="Interfata Validare" src="https://github.com/user-attachments/assets/129b349a-198c-4e05-870c-0773a92fb726" />
 
 
 ### 3. Panou Administrator (Gestiune Personal)
-![Admin Panel]<img width="1034" height="590" alt="Admin" src="https://github.com/user-attachments/assets/2dc7c2e1-fc2e-4324-8fc9-c167069da70a" />
+<img width="1034" height="590" alt="Admin" src="https://github.com/user-attachments/assets/2dc7c2e1-fc2e-4324-8fc9-c167069da70a" />
 
