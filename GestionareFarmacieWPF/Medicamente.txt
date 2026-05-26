@@ -1,0 +1,20 @@
+101;Paracetamol Terapie;1;1;12.50;50
+102;Nurofen Forte;1;5;28.90;30
+103;Amoxicilina Atb;1;7;18.20;20
+104;Aspenter 100mg;1;4;15.00;100
+105;Algocalmin;1;0;22.30;45
+106;Sirop CoughEnd;2;5;35.00;15
+107;Sirop Patlagina;2;1;19.50;25
+108;Prospan Sirop;2;3;42.00;12
+109;Voltaren Emulgel;3;0;38.50;18
+110;Baneocin Unguent;3;4;26.00;40
+111;Triderm Crema;3;5;45.20;14
+112;Claritin Alergii;1;1;21.00;60
+113;Zyrtec Picaturi;1;4;24.50;35
+114;No-Spa Forte;1;0;32.00;80
+116;Ketonal Forte;1;4;17.80;55
+117;Diclac Gel;3;0;23.40;28
+118;Coldrex MaxGrip;1;5;31.00;42
+119;Linex Forte;1;7;44.00;65
+120;Siofor 1000;1;6;14.50;90995
+217;Biancoxan;3;1;231;5;12.03.2029

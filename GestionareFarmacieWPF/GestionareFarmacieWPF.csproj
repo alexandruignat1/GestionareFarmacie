@@ -18,4 +18,13 @@
     <ProjectReference Include="..\NivelStocareDate\NivelStocareDate.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Farmacisti.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Medicamente.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

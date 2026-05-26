@@ -1,0 +1,2 @@
+1;Alexandru;admin@farmacie.ro;1234;True
+2;Bianca;b@farmacie.ro;1234;False
